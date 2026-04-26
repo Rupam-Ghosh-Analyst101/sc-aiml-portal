@@ -36,32 +36,51 @@
     cursor: none; /* Hide default cursor for custom target lock */
   }
 
+  /* City Skyline */
+  .city-skyline {
+    position: fixed;
+    bottom: 20vh; /* Sits right above the 3D grid */
+    left: 0;
+    width: 100%;
+    height: 70vh;
+    background-image: url('city_bg.png');
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: repeat-x;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.5; /* Kept slightly faded so form is readable */
+    filter: contrast(1.1) drop-shadow(0 0 40px rgba(255, 0, 127, 0.3));
+    mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+  }
+
   /* 3D Synthwave Grid */
   .synth-grid {
     position: fixed;
-    bottom: -10vh;
-    left: 0;
-    width: 100%;
-    height: 60vh;
+    bottom: -20vh;
+    left: -50vw;
+    width: 200vw;
+    height: 80vh;
     background-image: 
-      linear-gradient(rgba(255, 0, 127, 0.5) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 0, 127, 0.5) 1px, transparent 1px);
-    background-size: 40px 40px;
+      linear-gradient(rgba(255, 0, 127, 0.6) 2px, transparent 2px),
+      linear-gradient(90deg, rgba(255, 0, 127, 0.6) 2px, transparent 2px);
+    background-size: 80px 80px;
     background-position: center bottom;
-    transform: perspective(600px) rotateX(70deg);
+    transform: perspective(600px) rotateX(75deg);
     z-index: 0;
     pointer-events: none;
-    animation: gridMove 2s linear infinite;
-    box-shadow: inset 0 100px 100px var(--dark);
+    animation: gridMove 1s linear infinite;
+    box-shadow: inset 0 100px 150px var(--dark);
   }
 
   @keyframes gridMove {
     0% { background-position: 0 0; }
-    100% { background-position: 0 40px; }
+    100% { background-position: 0 80px; }
   }
 
-  /* Shooting Lasers */
-  .laser-container {
+  /* Warzone Engine CSS */
+  .warzone-container {
     position: fixed;
     inset: 0;
     z-index: 0;
@@ -69,39 +88,35 @@
     overflow: hidden;
   }
 
-  .laser {
+  .missile {
     position: absolute;
-    width: 150px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--cyan), #fff);
+    width: 4px;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--cyan), #fff);
     border-radius: 50%;
-    box-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan);
-    opacity: 0;
+    box-shadow: 0 0 15px var(--cyan), 0 0 30px var(--cyan);
+    transform-origin: bottom center;
+  }
+  
+  .missile.pink {
+    background: linear-gradient(to bottom, transparent, var(--pink), #fff);
+    box-shadow: 0 0 15px var(--pink), 0 0 30px var(--pink);
   }
 
-  .laser.pink {
-    background: linear-gradient(90deg, transparent, var(--pink), #fff);
-    box-shadow: 0 0 10px var(--pink), 0 0 20px var(--pink);
+  .explosion {
+    position: absolute;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: explode 0.6s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+  }
+  
+  @keyframes explode {
+    0% { width: 0; height: 0; opacity: 1; box-shadow: 0 0 80px 30px currentColor; background: #fff;}
+    10% { background: currentColor; }
+    100% { width: 250px; height: 250px; opacity: 0; box-shadow: 0 0 150px 80px currentColor; border: 4px solid currentColor; }
   }
 
-  .laser-1 { top: 20%; left: -200px; animation: shootRight 3s linear infinite 1s; }
-  .laser-2 { top: 60%; right: -200px; animation: shootLeft 4s linear infinite 2.5s; width: 250px; }
-  .laser-3 { top: 80%; left: -200px; animation: shootRight 2.5s linear infinite 0.5s; width: 100px; }
-
-  @keyframes shootRight {
-    0% { transform: translateX(0); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { transform: translateX(120vw); opacity: 0; }
-  }
-
-  @keyframes shootLeft {
-    0% { transform: translateX(0) scaleX(-1); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { transform: translateX(-120vw) scaleX(-1); opacity: 0; }
-  }
-
+  /* Layout Wrapper */
   .wrapper {
     position: relative;
     z-index: 1;
@@ -293,8 +308,9 @@
     border: 2px solid var(--border);
     position: relative;
     clip-path: polygon(30px 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%, 0 30px);
-    backdrop-filter: blur(10px);
-    box-shadow: inset 0 0 30px rgba(255, 0, 127, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: inset 0 0 30px rgba(255, 0, 127, 0.15);
   }
 
   .panel-header {
@@ -794,12 +810,9 @@
 <body>
 
 <!-- Dynamic Background Elements -->
+<div class="city-skyline"></div>
 <div class="synth-grid"></div>
-<div class="laser-container">
-  <div class="laser laser-1 pink"></div>
-  <div class="laser laser-2"></div>
-  <div class="laser laser-3 pink"></div>
-</div>
+<div id="warzone-container" class="warzone-container"></div>
 
 <div class="wrapper">
 
@@ -1042,6 +1055,82 @@
 </div>
 
 <script>
+  // Warzone Engine (Missiles & Explosions)
+  const warzone = document.getElementById('warzone-container');
+  
+  function fireMissile() {
+    if (window.innerWidth < 600) return; // Disable on mobile to keep form readable
+    
+    const missile = document.createElement('div');
+    const isPink = Math.random() > 0.5;
+    missile.className = 'missile ' + (isPink ? 'pink' : '');
+    
+    const startX = Math.random() * window.innerWidth;
+    const endX = startX + (Math.random() * 400 - 200); // Angle of falling
+    const startY = -150;
+    
+    // Target height is somewhere in the city skyline (bottom 20vh to 60vh)
+    const targetY = window.innerHeight - (Math.random() * window.innerHeight * 0.4 + window.innerHeight * 0.15); 
+    
+    // Calculate angle to rotate the missile
+    const angle = Math.atan2(targetY - startY, endX - startX) * 180 / Math.PI;
+    
+    missile.style.left = startX + 'px';
+    missile.style.top = startY + 'px';
+    missile.style.transform = `rotate(${angle - 90}deg)`;
+    
+    warzone.appendChild(missile);
+    
+    // Animate falling
+    const duration = 600 + Math.random() * 800; // 0.6s to 1.4s fall time
+    
+    missile.animate([
+      { left: startX + 'px', top: startY + 'px' },
+      { left: endX + 'px', top: targetY + 'px' }
+    ], {
+      duration: duration,
+      easing: 'linear',
+      fill: 'forwards'
+    }).onfinish = () => {
+      // Explosion
+      missile.remove();
+      createExplosion(endX, targetY, isPink ? 'var(--pink)' : 'var(--cyan)');
+    };
+    
+    // Schedule next missile
+    setTimeout(fireMissile, 400 + Math.random() * 1500);
+  }
+  
+  function createExplosion(x, y, color) {
+    const explosion = document.createElement('div');
+    explosion.className = 'explosion';
+    explosion.style.left = x + 'px';
+    explosion.style.top = y + 'px';
+    explosion.style.color = color;
+    warzone.appendChild(explosion);
+    
+    // Flash background slightly
+    const flash = document.createElement('div');
+    flash.style.position = 'fixed';
+    flash.style.inset = 0;
+    flash.style.background = color;
+    flash.style.opacity = '0.05';
+    flash.style.pointerEvents = 'none';
+    flash.style.zIndex = 0;
+    warzone.appendChild(flash);
+    
+    flash.animate([{opacity: 0.1}, {opacity: 0}], {duration: 400});
+    
+    setTimeout(() => {
+      if(explosion.parentNode) explosion.remove();
+      if(flash.parentNode) flash.remove();
+    }, 600);
+  }
+  
+  // Start warzone bombardment
+  setTimeout(fireMissile, 1000);
+  setTimeout(fireMissile, 2000); // 2 concurrent missile streams
+
   // Dynamic Target Lock Cursor
   document.addEventListener('mousemove', (e) => {
     let cursor = document.getElementById('target-lock');
