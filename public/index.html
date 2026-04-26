@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SC CSE(AI-ML) // Interest Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cyan: #00f5d4;
+    --cyan-dim: #00b89e;
+    --cyan-glow: rgba(0,245,212,0.15);
+    --dark: #050a0e;
+    --dark2: #0a1520;
+    --dark3: #0d1e2e;
+    --panel: rgba(10,25,40,0.85);
+    --border: rgba(0,245,212,0.25);
+    --border-bright: rgba(0,245,212,0.7);
+    --text: #c8e8e4;
+    --text-dim: #5a8a85;
+    --red: #ff3a5c;
+    --amber: #ffb800;
+    --font-head: 'Orbitron', monospace;
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-body: 'Rajdhani', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Animated grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,245,212,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,245,212,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Scanline overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .bg-orb-1 {
+    width: 600px; height: 600px;
+    top: -200px; left: -200px;
+    background: radial-gradient(circle, rgba(0,245,212,0.06) 0%, transparent 70%);
+  }
+  .bg-orb-2 {
+    width: 500px; height: 500px;
+    bottom: -150px; right: -150px;
+    background: radial-gradient(circle, rgba(0,120,255,0.07) 0%, transparent 70%);
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 4rem;
+  }
+
+  /* Header */
+  .header {
+    width: 100%;
+    max-width: 720px;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,245,212,0.07);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 4px 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--cyan);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .header-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--cyan);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .header h1 {
+    font-family: var(--font-head);
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 2px;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .header h1 span {
+    color: var(--cyan);
+    position: relative;
+  }
+
+  .header-line {
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    margin: 1.2rem auto;
+    animation: scanline 3s ease-in-out infinite;
+  }
+
+  @keyframes scanline {
+    0%, 100% { width: 80px; opacity: 0.7; }
+    50% { width: 160px; opacity: 1; }
+  }
+
+  .header p {
+    font-size: 1rem;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    font-weight: 400;
+    font-family: var(--font-mono);
+  }
+
+  /* Progress */
+  .progress-wrap {
+    width: 100%;
+    max-width: 720px;
+    margin-bottom: 2rem;
+  }
+
+  .progress-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 12px;
+  }
+
+  .step-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    position: relative;
+  }
+
+  .step-dot {
+    width: 32px; height: 32px;
+    border: 1.5px solid var(--border);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    background: var(--dark2);
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 2;
+  }
+
+  .step-dot.active {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    background: rgba(0,245,212,0.1);
+    box-shadow: 0 0 16px rgba(0,245,212,0.3);
+  }
+
+  .step-dot.done {
+    border-color: var(--cyan-dim);
+    background: rgba(0,245,212,0.15);
+    color: var(--cyan);
+  }
+
+  .step-label {
+    font-size: 9px;
+    font-family: var(--font-mono);
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: color 0.4s;
+  }
+
+  .step-node.active .step-label { color: var(--cyan); }
+  .step-node.done .step-label { color: var(--cyan-dim); }
+
+  .step-connector {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    margin-top: -18px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    transition: background 0.4s;
+  }
+
+  .step-connector.done {
+    background: var(--cyan-dim);
+  }
+
+  .step-connector.done::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    animation: connectorShine 2s ease-in-out infinite;
+  }
+
+  @keyframes connectorShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .progress-bar {
+    height: 2px;
+    background: var(--dark3);
+    border-radius: 1px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cyan-dim), var(--cyan));
+    border-radius: 1px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -2px;
+    bottom: -2px;
+    width: 20px;
+    background: linear-gradient(90deg, transparent, rgba(0,245,212,0.8));
+  }
+
+  /* Form Panel */
+  .form-panel {
+    width: 100%;
+    max-width: 720px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+  }
+
+  .form-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), var(--cyan-dim), transparent);
+  }
+
+  .panel-header {
+    padding: 1.5rem 2rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .panel-title {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--cyan);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .panel-status {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  .panel-status span {
+    color: var(--amber);
+  }
+
+  /* Steps */
+  .step {
+    display: none;
+    padding: 2rem;
+    animation: stepIn 0.4s ease;
+  }
+
+  .step.active { display: block; }
+
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .step-heading {
+    font-family: var(--font-head);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .step-sub {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    margin-bottom: 2rem;
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+  }
+
+  .field-grid.one { grid-template-columns: 1fr; }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .field.span2 { grid-column: span 2; }
+
+  label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--cyan-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  label .req {
+    color: var(--red);
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  label .opt {
+    color: var(--text-dim);
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="url"],
+  select,
+  textarea {
+    background: rgba(5,15,25,0.8);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    padding: 10px 14px;
+    outline: none;
+    transition: all 0.3s ease;
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: rgba(90,138,133,0.5);
+    font-size: 13px;
+    font-weight: 300;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--cyan);
+    background: rgba(0,245,212,0.04);
+    box-shadow: 0 0 0 3px rgba(0,245,212,0.08), inset 0 0 20px rgba(0,245,212,0.03);
+    color: #fff;
+  }
+
+  input.error, select.error, textarea.error {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(255,58,92,0.1);
+  }
+
+  .error-msg {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--red);
+    letter-spacing: 1px;
+    display: none;
+  }
+
+  .error-msg.show { display: block; }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2300b89e' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  select option {
+    background: #0a1520;
+    color: var(--text);
+  }
+
+  textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
+
+  /* Checkboxes */
+  .check-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(5,15,25,0.7);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    user-select: none;
+  }
+
+  .check-item:hover {
+    border-color: var(--cyan-dim);
+    background: rgba(0,245,212,0.05);
+  }
+
+  .check-item.checked {
+    border-color: var(--cyan);
+    background: rgba(0,245,212,0.1);
+    box-shadow: 0 0 12px rgba(0,245,212,0.1);
+  }
+
+  .check-box {
+    width: 16px; height: 16px;
+    border: 1px solid var(--border);
+    border-radius: 1px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .check-item.checked .check-box {
+    border-color: var(--cyan);
+    background: var(--cyan);
+  }
+
+  .check-box svg { display: none; }
+  .check-item.checked .check-box svg { display: block; }
+
+  .check-label {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+
+  .check-item.checked .check-label { color: var(--text); }
+
+  /* Radio groups */
+  .radio-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  .radio-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(5,15,25,0.7);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.25s;
+    user-select: none;
+  }
+
+  .radio-item:hover { border-color: var(--cyan-dim); }
+  .radio-item.selected {
+    border-color: var(--cyan);
+    background: rgba(0,245,212,0.1);
+  }
+
+  .radio-dot {
+    width: 14px; height: 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .radio-item.selected .radio-dot {
+    border-color: var(--cyan);
+  }
+
+  .radio-dot::after {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .radio-item.selected .radio-dot::after { opacity: 1; }
+
+  .radio-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    transition: color 0.2s;
+  }
+
+  .radio-item.selected .radio-text { color: var(--text); }
+
+  /* Buttons */
+  .btn-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 12px 28px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+    outline: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-primary {
+    background: var(--cyan);
+    color: #050a0e;
+  }
+
+  .btn-primary:hover {
+    background: #fff;
+    box-shadow: 0 0 24px rgba(0,245,212,0.4);
+  }
+
+  .btn-primary:active { transform: scale(0.97); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--cyan-dim);
+    color: var(--text);
+  }
+
+  .btn-arrow {
+    width: 16px; height: 16px;
+    position: relative;
+  }
+
+  /* Corner decorations */
+  .corner-deco {
+    position: absolute;
+    width: 20px; height: 20px;
+    opacity: 0.6;
+  }
+
+  .corner-deco.tl { top: 0; left: 0; border-top: 2px solid var(--cyan); border-left: 2px solid var(--cyan); }
+  .corner-deco.tr { top: 0; right: 0; border-top: 2px solid var(--cyan); border-right: 2px solid var(--cyan); }
+  .corner-deco.bl { bottom: 0; left: 0; border-bottom: 2px solid var(--cyan); border-left: 2px solid var(--cyan); }
+  .corner-deco.br { bottom: 0; right: 0; border-bottom: 2px solid var(--cyan); border-right: 2px solid var(--cyan); }
+
+  /* Char counter */
+  .char-count {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    text-align: right;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* Success screen */
+  .success-screen {
+    display: none;
+    padding: 4rem 2rem;
+    text-align: center;
+    animation: stepIn 0.6s ease;
+  }
+
+  .success-screen.show { display: block; }
+
+  .success-icon {
+    width: 80px; height: 80px;
+    margin: 0 auto 2rem;
+    position: relative;
+  }
+
+  .success-ring {
+    width: 80px; height: 80px;
+    border: 2px solid var(--cyan);
+    border-radius: 50%;
+    position: absolute;
+    animation: ringPulse 2s ease-in-out infinite;
+  }
+
+  .success-ring:nth-child(2) {
+    width: 64px; height: 64px;
+    top: 8px; left: 8px;
+    border-color: var(--cyan-dim);
+    animation-delay: 0.3s;
+  }
+
+  .success-check {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--cyan);
+    font-size: 24px;
+  }
+
+  @keyframes ringPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.7; }
+  }
+
+  .success-title {
+    font-family: var(--font-head);
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .success-id {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--cyan);
+    letter-spacing: 3px;
+    background: rgba(0,245,212,0.07);
+    border: 1px solid var(--border);
+    padding: 8px 20px;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    border-radius: 2px;
+  }
+
+  .success-msg {
+    font-size: 15px;
+    color: var(--text-dim);
+    max-width: 380px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* Section divider */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 1.8rem 0 1.2rem;
+  }
+
+  .section-divider span {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .section-divider::before,
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Tooltip */
+  .field-hint {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  /* Loader */
+  .submit-loader {
+    display: none;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .submit-loader.show { display: flex; }
+
+  .loader-dot {
+    width: 6px; height: 6px;
+    background: var(--dark);
+    border-radius: 50%;
+    animation: loaderBounce 0.8s ease-in-out infinite;
+  }
+
+  .loader-dot:nth-child(2) { animation-delay: 0.1s; }
+  .loader-dot:nth-child(3) { animation-delay: 0.2s; }
+
+  @keyframes loaderBounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+    40% { transform: scale(1); opacity: 1; }
+  }
+
+  /* Terminal cursor blink on focus */
+  .terminal-cursor {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--cyan);
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+    margin-left: 2px;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .field-grid { grid-template-columns: 1fr; }
+    .field.span2 { grid-column: span 1; }
+    .step { padding: 1.5rem 1.2rem; }
+    .panel-header { padding: 1.2rem; }
+    .check-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 400px) {
+    .check-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+
+<div class="wrapper">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-badge">System Active · Recruitment Portal</div>
+    <h1>SC <span>CSE</span><br>AI-ML Division</h1>
+    <div class="header-line"></div>
+    <p>// Interest Registration Protocol · 2025</p>
+  </header>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-steps">
+      <div class="step-node active" id="sn1">
+        <div class="step-dot active">01</div>
+        <span class="step-label">Identity</span>
+      </div>
+      <div class="step-connector" id="sc1"></div>
+      <div class="step-node" id="sn2">
+        <div class="step-dot">02</div>
+        <span class="step-label">Academic</span>
+      </div>
+      <div class="step-connector" id="sc2"></div>
+      <div class="step-node" id="sn3">
+        <div class="step-dot">03</div>
+        <span class="step-label">Skills</span>
+      </div>
+      <div class="step-connector" id="sc3"></div>
+      <div class="step-node" id="sn4">
+        <div class="step-dot">04</div>
+        <span class="step-label">Intent</span>
+      </div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 12.5%"></div>
+    </div>
+  </div>
+
+  <!-- Form Panel -->
+  <div class="form-panel">
+    <div class="corner-deco tl"></div>
+    <div class="corner-deco tr"></div>
+    <div class="corner-deco bl"></div>
+    <div class="corner-deco br"></div>
+
+    <div class="panel-header">
+      <span class="panel-title" id="panelTitle">// 01 · Identity Verification</span>
+      <span class="panel-status">STATUS: <span>OPEN</span></span>
+    </div>
+
+    <!-- Step 1: Identity -->
+    <div class="step active" id="step1">
+      <div class="step-heading">Personal Information</div>
+      <div class="step-sub">// Initializing candidate profile — enter your credentials below</div>
+
+      <div class="field-grid">
+        <div class="field">
+          <label>Full Name <span class="req">*</span></label>
+          <input type="text" id="fullName" placeholder="Your full name" autocomplete="name">
+          <span class="error-msg" id="err-fullName">⚠ Name is required</span>
+        </div>
+        <div class="field">
+          <label>Roll Number <span class="req">*</span></label>
+          <input type="text" id="rollNo" placeholder="e.g. 23CSE001" autocomplete="off">
+          <span class="error-msg" id="err-rollNo">⚠ Roll number is required</span>
+        </div>
+        <div class="field">
+          <label>College Email <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="you@college.edu" autocomplete="email">
+          <span class="error-msg" id="err-email">⚠ Valid email required</span>
+        </div>
+        <div class="field">
+          <label>Phone Number <span class="req">*</span></label>
+          <input type="tel" id="phone" placeholder="+91 XXXXX XXXXX" autocomplete="tel">
+          <span class="error-msg" id="err-phone">⚠ Phone number is required</span>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); letter-spacing: 1px;">STEP 1 / 4</span>
+        <button class="btn btn-primary" onclick="goNext(1)">
+          <span>Next</span>
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: Academic -->
+    <div class="step" id="step2">
+      <div class="step-heading">Academic Profile</div>
+      <div class="step-sub">// Mapping institutional coordinates — year, section, specialization</div>
+
+      <div class="field-grid">
+        <div class="field">
+          <label>Year of Study <span class="req">*</span></label>
+          <select id="year">
+            <option value="">Select year</option>
+            <option value="1">1st Year</option>
+            <option value="2">2nd Year</option>
+            <option value="3">3rd Year</option>
+            <option value="4">4th Year</option>
+          </select>
+          <span class="error-msg" id="err-year">⚠ Select your year</span>
+        </div>
+        <div class="field">
+          <label>Section <span class="req">*</span></label>
+          <select id="section">
+            <option value="">Select section</option>
+            <option value="A">Section A</option>
+            <option value="B">Section B</option>
+            <option value="C">Section C</option>
+            <option value="D">Section D</option>
+          </select>
+          <span class="error-msg" id="err-section">⚠ Select your section</span>
+        </div>
+        <div class="field span2">
+          <label>Branch / Specialization <span class="req">*</span></label>
+          <select id="branch">
+            <option value="">Select branch</option>
+            <option value="cse-aiml">CSE (AI-ML)</option>
+            <option value="cse-ds">CSE (Data Science)</option>
+            <option value="cse-cyber">CSE (Cyber Security)</option>
+            <option value="cse-iot">CSE (IoT)</option>
+            <option value="cse-core">CSE (Core)</option>
+            <option value="other">Other</option>
+          </select>
+          <span class="error-msg" id="err-branch">⚠ Select your branch</span>
+        </div>
+      </div>
+
+      <div class="section-divider"><span>Optional Links</span></div>
+
+      <div class="field-grid">
+        <div class="field">
+          <label>GitHub Profile <span class="opt">[ optional ]</span></label>
+          <input type="url" id="github" placeholder="https://github.com/username">
+        </div>
+        <div class="field">
+          <label>LinkedIn Profile <span class="opt">[ optional ]</span></label>
+          <input type="url" id="linkedin" placeholder="https://linkedin.com/in/username">
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goBack(2)">
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M13 5H1M5 9L1 5l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Back</span>
+        </button>
+        <button class="btn btn-primary" onclick="goNext(2)">
+          <span>Next</span>
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: Skills -->
+    <div class="step" id="step3">
+      <div class="step-heading">Technical Skill Matrix</div>
+      <div class="step-sub">// Select all domains that apply to your current knowledge set</div>
+
+      <div class="field one">
+        <label>Areas of Interest in AI-ML <span class="req">*</span></label>
+        <div class="check-grid" id="interestGrid">
+          <div class="check-item" onclick="toggleCheck(this, 'Machine Learning')">
+            <div class="check-box">
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#050a0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="check-label">Machine Learning</span>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this, 'Deep Learning')">
+            <div class="check-box">
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#050a0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="check-label">Deep Learning</span>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this, 'Computer Vision')">
+            <div class="check-box">
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#050a0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="check-label">Computer Vision</span>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this, 'NLP')">
+            <div class="check-box">
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#050a0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="check-label">NLP / LLMs</span>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this, 'Data Science')">
+            <div class="check-box">
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#050a0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="check-label">Data Science</span>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this, 'Reinforcement Learning')">
+            <div class="check-box">
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#050a0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="check-label">Reinforcement Learning</span>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this, 'MLOps')">
+            <div class="check-box">
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#050a0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="check-label">MLOps / Deployment</span>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this, 'Generative AI')">
+            <div class="check-box">
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#050a0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="check-label">Generative AI</span>
+          </div>
+        </div>
+        <span class="error-msg" id="err-interests">⚠ Select at least one interest</span>
+      </div>
+
+      <div class="section-divider"><span>Experience Level</span></div>
+
+      <div class="field one">
+        <label>Your Current Proficiency <span class="req">*</span></label>
+        <div class="radio-group" id="proficiencyGroup">
+          <div class="radio-item" onclick="selectRadio(this, 'proficiencyGroup')">
+            <div class="radio-dot"></div>
+            <span class="radio-text">Beginner</span>
+          </div>
+          <div class="radio-item" onclick="selectRadio(this, 'proficiencyGroup')">
+            <div class="radio-dot"></div>
+            <span class="radio-text">Intermediate</span>
+          </div>
+          <div class="radio-item" onclick="selectRadio(this, 'proficiencyGroup')">
+            <div class="radio-dot"></div>
+            <span class="radio-text">Advanced</span>
+          </div>
+        </div>
+        <span class="error-msg" id="err-proficiency">⚠ Select your proficiency level</span>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goBack(3)">
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M13 5H1M5 9L1 5l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Back</span>
+        </button>
+        <button class="btn btn-primary" onclick="goNext(3)">
+          <span>Next</span>
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 4: Intent -->
+    <div class="step" id="step4">
+      <div class="step-heading">Motivation & Intent</div>
+      <div class="step-sub">// Final module — explain your mission and what you bring to the division</div>
+
+      <div class="field-grid one" style="gap: 1.4rem;">
+        <div class="field">
+          <label>Why do you want to join SC CSE(AI-ML)? <span class="req">*</span></label>
+          <textarea id="whyJoin" placeholder="Tell us what drives your interest in this community and what you hope to gain or contribute..." maxlength="600" oninput="countChars(this, 'wjCount', 600)"></textarea>
+          <div class="char-count"><span id="wjCount">0</span> / 600</div>
+          <span class="error-msg" id="err-whyJoin">⚠ This field is required (min. 50 characters)</span>
+        </div>
+        <div class="field">
+          <label>Prior Project / Experience <span class="opt">[ optional ]</span></label>
+          <textarea id="experience" placeholder="Mention any relevant projects, courses, internships, or hackathons you've done in AI-ML..." maxlength="500" oninput="countChars(this, 'expCount', 500)"></textarea>
+          <div class="char-count"><span id="expCount">0</span> / 500</div>
+        </div>
+        <div class="field">
+          <label>How did you hear about us? <span class="req">*</span></label>
+          <select id="referral">
+            <option value="">Select source</option>
+            <option value="classmate">Classmate / Friend</option>
+            <option value="senior">Senior Student</option>
+            <option value="instagram">Instagram / Social Media</option>
+            <option value="notice">Notice Board / Announcement</option>
+            <option value="faculty">Faculty</option>
+            <option value="other">Other</option>
+          </select>
+          <span class="error-msg" id="err-referral">⚠ Please select an option</span>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goBack(4)">
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M13 5H1M5 9L1 5l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Back</span>
+        </button>
+        <button class="btn btn-primary" id="submitBtn" onclick="submitForm()">
+          <span id="submitText">Submit Application</span>
+          <div class="submit-loader" id="submitLoader">
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+          </div>
+          <svg id="submitArrow" width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Success -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">
+        <div class="success-ring"></div>
+        <div class="success-ring"></div>
+        <div class="success-check">✓</div>
+      </div>
+      <div class="success-title">Application Received</div>
+      <div class="success-id" id="successId">REF: SC-AIML-0000</div>
+      <p class="success-msg">
+        Your interest has been logged. The SC CSE(AI-ML) team will review your profile and reach out to your registered email.
+        <br><br>
+        <span style="color: var(--cyan); font-family: var(--font-mono); font-size: 12px; letter-spacing: 1px;">// Welcome to the division.</span>
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div style="margin-top: 2rem; text-align: center;">
+    <p style="font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); letter-spacing: 2px;">SC CSE(AI-ML) · INTEREST PORTAL · 2025</p>
+  </div>
+
+</div>
+
+<script>
+  let currentStep = 1;
+  const selectedInterests = new Set();
+  let proficiencySelected = '';
+
+  const stepTitles = [
+    '', // 0 unused
+    '// 01 · Identity Verification',
+    '// 02 · Academic Profile',
+    '// 03 · Skill Matrix',
+    '// 04 · Mission Statement'
+  ];
+
+  const progressMap = {1: 12.5, 2: 37.5, 3: 62.5, 4: 87.5};
+
+  function setProgress(step) {
+    document.getElementById('progressFill').style.width = progressMap[step] + '%';
+    document.getElementById('panelTitle').textContent = stepTitles[step];
+
+    for (let i = 1; i <= 4; i++) {
+      const node = document.getElementById('sn' + i);
+      const dot = node.querySelector('.step-dot');
+      node.classList.remove('active', 'done');
+      dot.classList.remove('active', 'done');
+      if (i < step) {
+        node.classList.add('done');
+        dot.classList.add('done');
+        dot.innerHTML = '✓';
+      } else if (i === step) {
+        node.classList.add('active');
+        dot.classList.add('active');
+        dot.textContent = '0' + i;
+      } else {
+        dot.textContent = '0' + i;
+      }
+    }
+
+    for (let i = 1; i <= 3; i++) {
+      const conn = document.getElementById('sc' + i);
+      if (conn) {
+        if (i < step) conn.classList.add('done');
+        else conn.classList.remove('done');
+      }
+    }
+  }
+
+  function showStep(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById('step' + n);
+    if (el) el.classList.add('active');
+    setProgress(n);
+    currentStep = n;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleCheck(el, val) {
+    el.classList.toggle('checked');
+    if (el.classList.contains('checked')) selectedInterests.add(val);
+    else selectedInterests.delete(val);
+  }
+
+  function selectRadio(el, groupId) {
+    document.querySelectorAll('#' + groupId + ' .radio-item').forEach(r => r.classList.remove('selected'));
+    el.classList.add('selected');
+    proficiencySelected = el.querySelector('.radio-text').textContent;
+  }
+
+  function countChars(el, countId, max) {
+    document.getElementById(countId).textContent = el.value.length;
+  }
+
+  function setError(id, show) {
+    const el = document.getElementById('err-' + id);
+    const input = document.getElementById(id);
+    if (el) { el.classList.toggle('show', show); }
+    if (input) { input.classList.toggle('error', show); }
+  }
+
+  function validateStep(step) {
+    let valid = true;
+    if (step === 1) {
+      const name = document.getElementById('fullName').value.trim();
+      const roll = document.getElementById('rollNo').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      if (!name) { setError('fullName', true); valid = false; } else setError('fullName', false);
+      if (!roll) { setError('rollNo', true); valid = false; } else setError('rollNo', false);
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError('email', true); valid = false; } else setError('email', false);
+      if (!phone) { setError('phone', true); valid = false; } else setError('phone', false);
+    }
+    if (step === 2) {
+      const year = document.getElementById('year').value;
+      const section = document.getElementById('section').value;
+      const branch = document.getElementById('branch').value;
+      if (!year) { setError('year', true); valid = false; } else setError('year', false);
+      if (!section) { setError('section', true); valid = false; } else setError('section', false);
+      if (!branch) { setError('branch', true); valid = false; } else setError('branch', false);
+    }
+    if (step === 3) {
+      if (selectedInterests.size === 0) {
+        document.getElementById('err-interests').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('err-interests').classList.remove('show');
+      }
+      if (!proficiencySelected) {
+        document.getElementById('err-proficiency').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('err-proficiency').classList.remove('show');
+      }
+    }
+    if (step === 4) {
+      const why = document.getElementById('whyJoin').value.trim();
+      const ref = document.getElementById('referral').value;
+      if (!why || why.length < 50) { setError('whyJoin', true); valid = false; } else setError('whyJoin', false);
+      if (!ref) { setError('referral', true); valid = false; } else setError('referral', false);
+    }
+    return valid;
+  }
+
+  function goNext(from) {
+    if (validateStep(from)) {
+      showStep(from + 1);
+    }
+  }
+
+  function goBack(from) {
+    showStep(from - 1);
+  }
+
+  async function submitForm() {
+    if (!validateStep(4)) return;
+    const btn = document.getElementById('submitBtn');
+    const txt = document.getElementById('submitText');
+    const loader = document.getElementById('submitLoader');
+    const arrow = document.getElementById('submitArrow');
+    txt.textContent = 'Processing';
+    loader.classList.add('show');
+    arrow.style.display = 'none';
+    btn.disabled = true;
+
+    const data = {
+      fullName: document.getElementById('fullName').value.trim(),
+      rollNo: document.getElementById('rollNo').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      year: document.getElementById('year').value,
+      section: document.getElementById('section').value,
+      branch: document.getElementById('branch').value,
+      github: document.getElementById('github').value.trim(),
+      linkedin: document.getElementById('linkedin').value.trim(),
+      interests: Array.from(selectedInterests),
+      proficiency: proficiencySelected,
+      whyJoin: document.getElementById('whyJoin').value.trim(),
+      experience: document.getElementById('experience').value.trim(),
+      referral: document.getElementById('referral').value
+    };
+
+    try {
+      const response = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Server error');
+      }
+
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById('panelTitle').textContent = '// Application Submitted';
+      document.getElementById('progressFill').style.width = '100%';
+
+      for (let i = 1; i <= 4; i++) {
+        const node = document.getElementById('sn' + i);
+        const dot = node.querySelector('.step-dot');
+        node.classList.remove('active');
+        node.classList.add('done');
+        dot.classList.remove('active');
+        dot.classList.add('done');
+        dot.innerHTML = '✓';
+      }
+
+      for (let i = 1; i <= 3; i++) {
+        const conn = document.getElementById('sc' + i);
+        if (conn) conn.classList.add('done');
+      }
+
+      document.getElementById('successId').textContent = 'REF: ' + result.ref_id;
+      document.getElementById('successScreen').classList.add('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      
+    } catch (err) {
+      alert("Submission failed: " + err.message + "\\nMake sure the backend server is running.");
+      txt.textContent = 'Submit Application';
+      loader.classList.remove('show');
+      arrow.style.display = 'block';
+      btn.disabled = false;
+    }
+  }
+</script>
+
+</body>
+</html>
