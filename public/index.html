@@ -3,22 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SC CSE(AI-ML) // Interest Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>SC CSE(AI-ML) // Recruitment</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cyan: #00f5d4;
-    --cyan-dim: #00b89e;
-    --purple: #9d4edd;
-    --purple-glow: rgba(157, 78, 221, 0.4);
-    --dark: #07050f;
-    --panel-bg: rgba(20, 15, 35, 0.4);
-    --border: rgba(255, 255, 255, 0.08);
-    --border-hover: rgba(0, 245, 212, 0.4);
-    --text: #e0e0e0;
-    --text-dim: #8e8b99;
-    --red: #ff3a5c;
-    --amber: #ffb800;
+    --pink: #ff007f;
+    --pink-glow: rgba(255, 0, 127, 0.4);
+    --cyan: #00f3ff;
+    --cyan-glow: rgba(0, 243, 255, 0.4);
+    --dark: #07010f;
+    --panel-bg: rgba(10, 2, 20, 0.85);
+    --border: rgba(255, 0, 127, 0.3);
+    --text: #ffffff;
+    --text-dim: #a89fba;
+    --alert: #fffc00;
     --font-head: 'Orbitron', monospace;
     --font-mono: 'Share Tech Mono', monospace;
     --font-body: 'Rajdhani', sans-serif;
@@ -35,55 +33,73 @@
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
-    /* Smooth background color transition */
-    transition: background 0.5s ease;
+    cursor: none; /* Hide default cursor for custom target lock */
   }
 
-  /* Animated Hex Grid Background */
-  body::before {
-    content: '';
+  /* 3D Synthwave Grid */
+  .synth-grid {
+    position: fixed;
+    bottom: -10vh;
+    left: 0;
+    width: 100%;
+    height: 60vh;
+    background-image: 
+      linear-gradient(rgba(255, 0, 127, 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 0, 127, 0.5) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center bottom;
+    transform: perspective(600px) rotateX(70deg);
+    z-index: 0;
+    pointer-events: none;
+    animation: gridMove 2s linear infinite;
+    box-shadow: inset 0 100px 100px var(--dark);
+  }
+
+  @keyframes gridMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 40px; }
+  }
+
+  /* Shooting Lasers */
+  .laser-container {
     position: fixed;
     inset: 0;
-    background-image: 
-      radial-gradient(var(--border) 1px, transparent 1px);
-    background-size: 30px 30px;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.3;
+    overflow: hidden;
   }
 
-  /* Dynamic Glowing Orbs */
-  .bg-orb {
-    position: fixed;
+  .laser {
+    position: absolute;
+    width: 150px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), #fff);
     border-radius: 50%;
-    filter: blur(80px);
-    z-index: 0;
-    animation: float 15s infinite ease-in-out alternate;
-    pointer-events: none;
-  }
-  .bg-orb-1 {
-    width: 500px; height: 500px;
-    top: -100px; left: -100px;
-    background: rgba(157, 78, 221, 0.15);
-    animation-delay: 0s;
-  }
-  .bg-orb-2 {
-    width: 600px; height: 600px;
-    bottom: -150px; right: -100px;
-    background: rgba(0, 245, 212, 0.1);
-    animation-delay: -5s;
-  }
-  .bg-orb-3 {
-    width: 400px; height: 400px;
-    top: 40%; left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 120, 255, 0.08);
-    animation-duration: 20s;
+    box-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan);
+    opacity: 0;
   }
 
-  @keyframes float {
-    0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(30px, 50px) scale(1.1); }
+  .laser.pink {
+    background: linear-gradient(90deg, transparent, var(--pink), #fff);
+    box-shadow: 0 0 10px var(--pink), 0 0 20px var(--pink);
+  }
+
+  .laser-1 { top: 20%; left: -200px; animation: shootRight 3s linear infinite 1s; }
+  .laser-2 { top: 60%; right: -200px; animation: shootLeft 4s linear infinite 2.5s; width: 250px; }
+  .laser-3 { top: 80%; left: -200px; animation: shootRight 2.5s linear infinite 0.5s; width: 100px; }
+
+  @keyframes shootRight {
+    0% { transform: translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateX(120vw); opacity: 0; }
+  }
+
+  @keyframes shootLeft {
+    0% { transform: translateX(0) scaleX(-1); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateX(-120vw) scaleX(-1); opacity: 0; }
   }
 
   .wrapper {
@@ -100,7 +116,7 @@
   .header {
     width: 100%;
     max-width: 760px;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     text-align: center;
     position: relative;
   }
@@ -109,80 +125,74 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--border);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 6px 18px;
+    background: rgba(255, 0, 127, 0.1);
+    border: 1px solid var(--pink);
+    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+    padding: 6px 24px;
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12px;
     color: var(--cyan);
-    letter-spacing: 3px;
+    letter-spacing: 4px;
     text-transform: uppercase;
     margin-bottom: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-  }
-
-  .header-badge:hover {
-    border-color: var(--cyan-dim);
-    box-shadow: 0 4px 20px rgba(0, 245, 212, 0.15);
-    transform: translateY(-2px);
-  }
-
-  .header-badge::before {
-    content: '';
-    width: 6px; height: 6px;
-    background: var(--cyan);
-    border-radius: 50%;
-    box-shadow: 0 0 10px var(--cyan);
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 10px var(--cyan); }
-    50% { opacity: 0.4; transform: scale(0.8); box-shadow: 0 0 2px var(--cyan); }
+    text-shadow: 0 0 5px var(--cyan);
   }
 
   .header h1 {
     font-family: var(--font-head);
-    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-size: clamp(2.2rem, 6vw, 3.8rem);
     font-weight: 900;
     color: #fff;
-    letter-spacing: 2px;
-    line-height: 1.1;
+    letter-spacing: 4px;
+    line-height: 1;
     text-transform: uppercase;
-    text-shadow: 0 0 40px rgba(255,255,255,0.1);
-  }
-
-  .header h1 span {
-    background: linear-gradient(90deg, var(--cyan), #4cc9f0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 0px var(--pink), -2px -2px 0px var(--cyan);
+    margin-bottom: 1rem;
     position: relative;
+    display: inline-block;
   }
 
-  .header-line {
-    width: 100px;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--purple), var(--cyan), transparent);
-    margin: 1.5rem auto;
-    border-radius: 2px;
+  /* Glitch effect on Header */
+  .header h1::before, .header h1::after {
+    content: 'SC CSE\nAI-ML DIVISION';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    opacity: 0.8;
+  }
+  .header h1::before {
+    color: var(--cyan);
+    z-index: -1;
+    animation: glitch 3s infinite alternate-reverse;
+  }
+  .header h1::after {
+    color: var(--pink);
+    z-index: -2;
+    animation: glitch 2s infinite alternate;
+  }
+
+  @keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
   }
 
   .header p {
-    font-size: 1.1rem;
-    color: var(--text-dim);
-    letter-spacing: 1px;
-    font-weight: 500;
+    font-size: 1.2rem;
+    color: var(--cyan);
+    letter-spacing: 2px;
+    font-weight: 600;
     font-family: var(--font-mono);
+    text-transform: uppercase;
   }
 
   /* Progress Bar */
   .progress-wrap {
     width: 100%;
     max-width: 760px;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
   }
 
   .progress-steps {
@@ -203,183 +213,161 @@
 
   .step-dot {
     width: 36px; height: 36px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
+    border: 2px solid var(--pink);
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--text-dim);
-    background: rgba(20, 15, 35, 0.6);
-    backdrop-filter: blur(4px);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 14px;
+    color: var(--pink);
+    background: var(--dark);
+    transition: all 0.3s;
     position: relative;
     z-index: 2;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   }
 
   .step-dot.active {
-    border-color: var(--cyan);
-    color: var(--cyan);
-    background: rgba(0, 245, 212, 0.1);
-    box-shadow: 0 0 20px rgba(0, 245, 212, 0.2);
-    transform: scale(1.1);
+    background: var(--pink);
+    color: #fff;
+    box-shadow: 0 0 20px var(--pink);
+    transform: scale(1.2);
   }
 
   .step-dot.done {
-    border-color: var(--purple);
-    background: var(--purple);
-    color: #fff;
-    box-shadow: 0 0 15px var(--purple-glow);
+    border-color: var(--cyan);
+    background: var(--cyan);
+    color: var(--dark);
+    box-shadow: 0 0 15px var(--cyan);
   }
 
   .step-label {
-    font-size: 10px;
+    font-size: 11px;
     font-family: var(--font-mono);
     color: var(--text-dim);
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     text-transform: uppercase;
     white-space: nowrap;
-    transition: all 0.4s;
-    font-weight: 600;
+    transition: all 0.3s;
+    font-weight: 700;
   }
 
-  .step-node.active .step-label { color: var(--cyan); transform: translateY(2px); }
-  .step-node.done .step-label { color: #fff; }
+  .step-node.active .step-label { color: var(--pink); text-shadow: 0 0 5px var(--pink); }
+  .step-node.done .step-label { color: var(--cyan); }
 
   .step-connector {
     flex: 1;
-    height: 2px;
-    background: var(--border);
+    height: 3px;
+    background: rgba(255, 0, 127, 0.2);
     margin-top: -22px;
     position: relative;
     z-index: 1;
-    overflow: hidden;
-    transition: background 0.4s;
-    border-radius: 1px;
+    transition: background 0.3s;
   }
 
   .step-connector.done {
-    background: var(--purple);
+    background: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan);
   }
 
   .progress-bar {
     height: 4px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 2px;
+    background: rgba(255, 0, 127, 0.2);
     overflow: hidden;
     position: relative;
   }
 
   .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--purple), var(--cyan));
-    border-radius: 2px;
-    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--cyan);
+    transition: width 0.4s ease-out;
     position: relative;
     box-shadow: 0 0 10px var(--cyan);
   }
 
-  /* Form Panel - Glassmorphism */
+  /* Form Panel - Aggressive Clipped Path */
   .form-panel {
     width: 100%;
     max-width: 760px;
     background: var(--panel-bg);
-    border: 1px solid var(--border);
-    border-radius: 16px;
+    border: 2px solid var(--border);
     position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .form-panel:hover {
-    box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.15);
-  }
-
-  /* Decorative glowing top edge */
-  .form-panel::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent);
-    opacity: 0.7;
+    clip-path: polygon(30px 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%, 0 30px);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 0 30px rgba(255, 0, 127, 0.1);
   }
 
   .panel-header {
     padding: 1.5rem 2.5rem;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 2px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(0,0,0,0.2);
+    background: repeating-linear-gradient(45deg, rgba(255,0,127,0.05), rgba(255,0,127,0.05) 5px, transparent 5px, transparent 10px);
   }
 
   .panel-title {
-    font-family: var(--font-mono);
-    font-size: 13px;
+    font-family: var(--font-head);
+    font-size: 16px;
     color: var(--cyan);
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 700;
+    text-shadow: 0 0 8px var(--cyan-glow);
   }
 
   .panel-status {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    letter-spacing: 1px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .panel-status span {
-    color: var(--cyan);
-    background: rgba(0, 245, 212, 0.1);
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-weight: 600;
+    font-size: 12px;
+    color: var(--text);
+    letter-spacing: 2px;
+    background: var(--pink);
+    padding: 4px 12px;
+    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+    font-weight: 700;
   }
 
   /* Steps Content */
   .step {
     display: none;
     padding: 2.5rem;
-    animation: fadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: flashIn 0.3s ease-out;
   }
 
   .step.active { display: block; }
 
-  @keyframes fadeSlideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  @keyframes flashIn {
+    0% { opacity: 0; filter: brightness(2) contrast(1.5); transform: scale(0.98); }
+    50% { opacity: 1; filter: brightness(1.5); }
+    100% { filter: brightness(1); transform: scale(1); }
   }
 
   .step-heading {
     font-family: var(--font-head);
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 1px;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--pink);
+    letter-spacing: 2px;
+    text-transform: uppercase;
     margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px var(--pink-glow);
   }
 
   .step-sub {
-    font-family: var(--font-body);
-    font-size: 15px;
+    font-family: var(--font-mono);
+    font-size: 14px;
     color: var(--text-dim);
     margin-bottom: 2.5rem;
     font-weight: 500;
+    letter-spacing: 1px;
+    border-left: 3px solid var(--cyan);
+    padding-left: 10px;
   }
 
   .field-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    gap: 2rem 1.5rem;
   }
 
   .field-grid.one { grid-template-columns: 1fr; }
@@ -395,114 +383,98 @@
 
   label {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text);
-    letter-spacing: 1px;
+    font-size: 12px;
+    color: var(--cyan);
+    letter-spacing: 2px;
     text-transform: uppercase;
     display: flex;
     align-items: center;
     gap: 8px;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   label .req {
-    color: var(--cyan);
-    font-size: 14px;
+    color: var(--pink);
+    font-size: 16px;
     line-height: 1;
-    text-shadow: 0 0 8px var(--cyan);
+    text-shadow: 0 0 8px var(--pink);
   }
 
-  label .opt {
-    color: var(--text-dim);
-    font-size: 9px;
-    letter-spacing: 1px;
-    background: rgba(255,255,255,0.05);
-    padding: 2px 6px;
-    border-radius: 4px;
-  }
-
-  /* Modern Inputs */
+  /* Aggressive Inputs */
   input[type="text"],
   input[type="email"],
   input[type="tel"],
   input[type="url"],
   select,
   textarea {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.5);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    color: #fff;
-    font-family: var(--font-body);
+    border-left: 4px solid var(--pink);
+    color: var(--cyan);
+    font-family: var(--font-mono);
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
     padding: 14px 16px;
     outline: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s;
     width: 100%;
     appearance: none;
     -webkit-appearance: none;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
   }
 
   input::placeholder, textarea::placeholder {
-    color: rgba(255,255,255,0.3);
-    font-weight: 400;
+    color: rgba(0, 243, 255, 0.3);
   }
 
   input:hover, select:hover, textarea:hover {
-    border-color: rgba(255,255,255,0.2);
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(255, 0, 127, 0.1);
   }
 
   input:focus,
   select:focus,
   textarea:focus {
     border-color: var(--cyan);
-    background: rgba(0, 245, 212, 0.03);
-    box-shadow: 0 0 0 4px rgba(0, 245, 212, 0.1), inset 0 2px 4px rgba(0,0,0,0.1);
-    transform: translateY(-2px);
+    border-left-color: var(--cyan);
+    background: rgba(0, 243, 255, 0.05);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+    color: #fff;
   }
 
   input.error, select.error, textarea.error {
-    border-color: var(--red);
-    box-shadow: 0 0 0 4px rgba(255, 58, 92, 0.1);
+    border-color: var(--alert);
+    border-left-color: var(--alert);
+    box-shadow: 0 0 15px rgba(255, 252, 0, 0.2);
+    color: var(--alert);
   }
 
   .error-msg {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--red);
-    letter-spacing: 0.5px;
+    font-size: 12px;
+    color: var(--alert);
+    letter-spacing: 1px;
     display: none;
     margin-top: 4px;
-    animation: shake 0.4s ease;
-  }
-
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-4px); }
-    75% { transform: translateX(4px); }
+    text-shadow: 0 0 5px var(--alert);
   }
 
   .error-msg.show { display: block; }
 
   select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10' viewBox='0 0 14 10'%3E%3Cpath d='M1 2l6 6 6-6' stroke='%2300f5d4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10' viewBox='0 0 14 10'%3E%3Cpath d='M1 2l6 6 6-6' stroke='%23ff007f' stroke-width='2' fill='none'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 16px center;
-    padding-right: 40px;
     cursor: pointer;
   }
 
   select option {
-    background: #110c1c;
-    color: #fff;
-    padding: 10px;
+    background: #000;
+    color: var(--cyan);
   }
 
-  textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
+  textarea { resize: vertical; min-height: 120px; }
 
-  /* Interactive Checkboxes */
+  /* Cyber Checkboxes */
   .check-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -514,70 +486,51 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.5);
     border: 1px solid var(--border);
-    border-radius: 8px;
     padding: 14px 16px;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s;
     user-select: none;
-    position: relative;
-    overflow: hidden;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
   }
 
-  .check-item::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
-    transform: translateX(-100%);
-    transition: transform 0.5s ease;
-  }
-
-  .check-item:hover::before { transform: translateX(100%); }
-  .check-item:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
+  .check-item:hover { border-color: var(--cyan); background: rgba(0, 243, 255, 0.1); }
 
   .check-item.checked {
-    border-color: var(--cyan);
-    background: rgba(0, 245, 212, 0.08);
-    box-shadow: 0 4px 15px rgba(0, 245, 212, 0.1);
+    border-color: var(--pink);
+    background: rgba(255, 0, 127, 0.15);
+    box-shadow: inset 0 0 15px rgba(255, 0, 127, 0.3);
   }
 
   .check-box {
     width: 20px; height: 20px;
-    border: 1.5px solid var(--text-dim);
-    border-radius: 4px;
-    flex-shrink: 0;
+    border: 2px solid var(--cyan);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s;
+    transition: all 0.2s;
   }
 
   .check-item.checked .check-box {
-    border-color: var(--cyan);
-    background: var(--cyan);
-    box-shadow: 0 0 10px var(--cyan);
+    background: var(--pink);
+    border-color: var(--pink);
+    box-shadow: 0 0 10px var(--pink);
   }
 
   .check-box svg { display: none; }
-  .check-item.checked .check-box svg { display: block; animation: scaleIn 0.3s ease; }
-
-  @keyframes scaleIn {
-    from { transform: scale(0); }
-    to { transform: scale(1); }
-  }
+  .check-item.checked .check-box svg { display: block; }
 
   .check-label {
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
     color: var(--text-dim);
-    letter-spacing: 0.5px;
-    transition: color 0.3s;
+    letter-spacing: 1px;
+    text-transform: uppercase;
   }
 
-  .check-item.checked .check-label { color: #fff; }
+  .check-item.checked .check-label { color: #fff; text-shadow: 0 0 5px var(--pink); }
 
   /* Interactive Radio Groups */
   .radio-group {
@@ -591,122 +544,99 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.5);
     border: 1px solid var(--border);
-    border-radius: 8px;
     padding: 12px 20px;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s;
     user-select: none;
     flex: 1;
     min-width: 140px;
     justify-content: center;
+    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
   }
 
-  .radio-item:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
+  .radio-item:hover { border-color: var(--cyan); }
   .radio-item.selected {
-    border-color: var(--purple);
-    background: rgba(157, 78, 221, 0.1);
-    box-shadow: 0 4px 15px rgba(157, 78, 221, 0.15);
+    border-color: var(--cyan);
+    background: var(--cyan);
+    box-shadow: 0 0 15px var(--cyan-glow);
   }
-
-  .radio-dot {
-    width: 18px; height: 18px;
-    border: 1.5px solid var(--text-dim);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.3s;
-  }
-
-  .radio-item.selected .radio-dot { border-color: var(--purple); }
-
-  .radio-dot::after {
-    content: '';
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--purple);
-    opacity: 0;
-    transition: all 0.3s;
-    transform: scale(0);
-    box-shadow: 0 0 8px var(--purple);
-  }
-
-  .radio-item.selected .radio-dot::after { opacity: 1; transform: scale(1); }
 
   .radio-text {
-    font-size: 15px;
-    font-weight: 600;
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 700;
     color: var(--text-dim);
-    letter-spacing: 0.5px;
-    transition: color 0.3s;
+    letter-spacing: 2px;
+    text-transform: uppercase;
   }
 
-  .radio-item.selected .radio-text { color: #fff; }
+  .radio-item.selected .radio-text { color: var(--dark); text-shadow: none; }
 
-  /* Premium Buttons */
+  /* Glitch Buttons */
   .btn-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 3rem;
     padding-top: 2rem;
-    border-top: 1px solid var(--border);
+    border-top: 2px dashed var(--border);
   }
 
   .btn {
     font-family: var(--font-head);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 2px;
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 4px;
     text-transform: uppercase;
-    padding: 14px 32px;
-    border-radius: 8px;
+    padding: 16px 36px;
     cursor: pointer;
     border: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    outline: none;
+    transition: all 0.1s;
     display: flex;
     align-items: center;
     gap: 12px;
     position: relative;
-    overflow: hidden;
+    clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
   }
-
-  .btn::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s ease;
-  }
-
-  .btn:hover::before { left: 100%; }
 
   .btn-primary {
-    background: linear-gradient(135deg, var(--cyan), #4cc9f0);
-    color: #000;
-    box-shadow: 0 6px 20px rgba(0, 245, 212, 0.3);
+    background: var(--pink);
+    color: #fff;
+    box-shadow: 0 0 20px var(--pink-glow);
   }
 
   .btn-primary:hover {
-    box-shadow: 0 8px 30px rgba(0, 245, 212, 0.5);
-    transform: translateY(-2px);
+    background: #fff;
+    color: var(--pink);
+    box-shadow: 0 0 30px #fff;
+    animation: btnGlitch 0.2s infinite;
   }
 
-  .btn-primary:active { transform: translateY(1px); box-shadow: 0 2px 10px rgba(0,245,212,0.3); }
+  @keyframes btnGlitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+  }
+
+  .btn-primary:active { transform: scale(0.95); }
 
   .btn-secondary {
-    background: rgba(255,255,255,0.05);
-    color: var(--text);
-    border: 1px solid var(--border);
-    backdrop-filter: blur(4px);
+    background: transparent;
+    color: var(--cyan);
+    border-left: 4px solid var(--cyan);
+    border-right: 4px solid var(--cyan);
+    padding: 16px 24px;
   }
 
   .btn-secondary:hover {
-    border-color: var(--text);
-    background: rgba(255,255,255,0.1);
-    transform: translateY(-2px);
+    background: var(--cyan);
+    color: #000;
+    box-shadow: 0 0 20px var(--cyan);
   }
 
   /* Success Screen */
@@ -714,13 +644,13 @@
     display: none;
     padding: 5rem 2rem;
     text-align: center;
-    animation: fadeSlideUp 0.6s ease;
+    animation: flashIn 0.5s ease;
   }
 
   .success-screen.show { display: block; }
 
   .success-icon {
-    width: 100px; height: 100px;
+    width: 120px; height: 120px;
     margin: 0 auto 2.5rem;
     position: relative;
     display: flex;
@@ -731,69 +661,55 @@
   .success-ring {
     position: absolute;
     inset: 0;
-    border: 2px solid var(--cyan);
+    border: 4px dashed var(--pink);
     border-radius: 50%;
-    animation: ripple 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    animation: spinSlow 4s linear infinite;
   }
 
-  .success-ring:nth-child(2) { animation-delay: -1s; }
-
-  @keyframes ripple {
-    0% { transform: scale(0.8); opacity: 1; }
-    100% { transform: scale(1.5); opacity: 0; }
+  .success-ring:nth-child(2) {
+    border: 4px solid var(--cyan);
+    animation: spinFast 2s linear infinite reverse;
+    transform: scale(0.8);
   }
+
+  @keyframes spinSlow { 100% { transform: rotate(360deg); } }
+  @keyframes spinFast { 100% { transform: scale(0.8) rotate(360deg); } }
 
   .success-check {
-    width: 60px; height: 60px;
-    background: var(--cyan);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #000;
-    font-size: 30px;
-    box-shadow: 0 0 30px rgba(0,245,212,0.5);
-    z-index: 2;
-    animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-size: 40px;
+    color: #fff;
+    text-shadow: 0 0 20px var(--pink);
+    animation: pulseCheck 1s infinite alternate;
   }
 
-  @keyframes popIn {
-    0% { transform: scale(0); }
-    100% { transform: scale(1); }
+  @keyframes pulseCheck {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.2); }
   }
 
   .success-title {
     font-family: var(--font-head);
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 900;
-    color: #fff;
-    letter-spacing: 2px;
+    color: var(--cyan);
+    letter-spacing: 4px;
     text-transform: uppercase;
     margin-bottom: 1.5rem;
-    text-shadow: 0 0 20px rgba(255,255,255,0.2);
+    text-shadow: 0 0 20px var(--cyan-glow);
   }
 
   .success-id {
     font-family: var(--font-mono);
-    font-size: 14px;
-    color: #fff;
-    letter-spacing: 2px;
-    background: rgba(157, 78, 221, 0.2);
-    border: 1px solid rgba(157, 78, 221, 0.5);
-    padding: 10px 24px;
+    font-size: 18px;
+    color: #000;
+    font-weight: 700;
+    letter-spacing: 3px;
+    background: var(--pink);
+    padding: 12px 30px;
     display: inline-block;
     margin-bottom: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(157, 78, 221, 0.2);
-  }
-
-  .success-msg {
-    font-size: 17px;
-    color: var(--text-dim);
-    max-width: 420px;
-    margin: 0 auto;
-    line-height: 1.6;
-    font-weight: 500;
+    clip-path: polygon(15px 0, 100% 0, calc(100% - 15px) 100%, 0 100%);
+    box-shadow: 0 0 20px var(--pink);
   }
 
   /* Section divider */
@@ -806,76 +722,92 @@
 
   .section-divider span {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    letter-spacing: 3px;
+    font-size: 14px;
+    color: var(--cyan);
+    letter-spacing: 4px;
     text-transform: uppercase;
-    white-space: nowrap;
-    font-weight: 600;
+    font-weight: 700;
+    text-shadow: 0 0 5px var(--cyan);
   }
 
-  .section-divider::before,
-  .section-divider::after {
+  .section-divider::before, .section-divider::after {
     content: '';
     flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--pink), transparent);
   }
 
   /* Char counter */
   .char-count {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-dim);
+    font-size: 12px;
+    color: var(--cyan);
     text-align: right;
     margin-top: 6px;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
   }
 
   /* Loader */
-  .submit-loader {
-    display: none;
-    align-items: center;
-    gap: 6px;
-  }
+  .submit-loader { display: none; align-items: center; gap: 8px; }
   .submit-loader.show { display: flex; }
-  .loader-dot {
-    width: 6px; height: 6px;
+  .loader-bar {
+    width: 6px; height: 16px;
     background: #000;
-    border-radius: 50%;
-    animation: loaderBounce 0.6s infinite alternate;
+    animation: bars 0.8s infinite;
   }
-  .loader-dot:nth-child(2) { animation-delay: 0.2s; }
-  .loader-dot:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes loaderBounce {
-    to { transform: translateY(-4px); opacity: 0.5; }
+  .loader-bar:nth-child(2) { animation-delay: 0.2s; }
+  .loader-bar:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bars {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(2); background: var(--pink); }
   }
 
-  /* Responsive */
+  /* Target Lock Cursor */
+  #target-lock {
+    position: fixed;
+    width: 40px; height: 40px;
+    border: 2px solid var(--cyan);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.1s, height 0.1s;
+    box-shadow: 0 0 10px var(--cyan);
+  }
+  #target-lock::before, #target-lock::after {
+    content: ''; position: absolute; background: var(--cyan);
+  }
+  #target-lock::before { top: 50%; left: -10px; width: 60px; height: 2px; transform: translateY(-50%); }
+  #target-lock::after { left: 50%; top: -10px; height: 60px; width: 2px; transform: translateX(-50%); }
+
   @media (max-width: 600px) {
     .field-grid { grid-template-columns: 1fr; }
     .field.span2 { grid-column: span 1; }
     .step { padding: 1.5rem; }
-    .panel-header { padding: 1.2rem 1.5rem; flex-direction: column; gap: 10px; align-items: flex-start;}
-    .check-grid { grid-template-columns: 1fr; }
-    .header h1 { font-size: 2rem; }
+    .panel-header { padding: 1.2rem; flex-direction: column; gap: 10px;}
+    .header h1 { font-size: 2.2rem; }
+    #target-lock { display: none; } /* Hide custom cursor on mobile */
+    body { cursor: auto; }
   }
 </style>
 </head>
 <body>
 
-<div class="bg-orb bg-orb-1"></div>
-<div class="bg-orb bg-orb-2"></div>
-<div class="bg-orb bg-orb-3"></div>
+<!-- Dynamic Background Elements -->
+<div class="synth-grid"></div>
+<div class="laser-container">
+  <div class="laser laser-1 pink"></div>
+  <div class="laser laser-2"></div>
+  <div class="laser laser-3 pink"></div>
+</div>
 
 <div class="wrapper">
 
   <!-- Header -->
   <header class="header">
-    <div class="header-badge">System Active · Recruitment Portal</div>
-    <h1>SC <span>CSE</span><br>AI-ML Division</h1>
-    <div class="header-line"></div>
-    <p>// Interest Registration Protocol · 2025</p>
+    <div class="header-badge">Target Acquired</div>
+    <h1>SC CSE<br>AI-ML Division</h1>
+    <p>// Initialize Registration Protocol</p>
   </header>
 
   <!-- Progress -->
@@ -883,471 +815,424 @@
     <div class="progress-steps">
       <div class="step-node active" id="sn1">
         <div class="step-dot active">01</div>
-        <span class="step-label">Identity</span>
+        <div class="step-label">Identify</div>
       </div>
       <div class="step-connector" id="sc1"></div>
+      
       <div class="step-node" id="sn2">
         <div class="step-dot">02</div>
-        <span class="step-label">Academic</span>
+        <div class="step-label">Specs</div>
       </div>
       <div class="step-connector" id="sc2"></div>
+      
       <div class="step-node" id="sn3">
         <div class="step-dot">03</div>
-        <span class="step-label">Skills</span>
+        <div class="step-label">Network</div>
       </div>
       <div class="step-connector" id="sc3"></div>
+      
       <div class="step-node" id="sn4">
         <div class="step-dot">04</div>
-        <span class="step-label">Intent</span>
+        <div class="step-label">Deploy</div>
       </div>
     </div>
     <div class="progress-bar">
-      <div class="progress-fill" id="progressFill" style="width: 12.5%"></div>
+      <div class="progress-fill" id="progressFill" style="width: 25%"></div>
     </div>
   </div>
 
   <!-- Form Panel -->
   <div class="form-panel">
-    <div class="corner-deco tl"></div>
-    <div class="corner-deco tr"></div>
-    <div class="corner-deco bl"></div>
-    <div class="corner-deco br"></div>
-
     <div class="panel-header">
-      <span class="panel-title" id="panelTitle">// 01 · Identity Verification</span>
-      <span class="panel-status">STATUS: <span>OPEN</span></span>
+      <div class="panel-title" id="panelTitle">// INPUT PARAMETERS</div>
+      <div class="panel-status">SYS.ONLINE</div>
     </div>
 
-    <!-- Step 1: Identity -->
-    <div class="step active" id="step1">
-      <div class="step-heading">Personal Information</div>
-      <div class="step-sub">// Initializing candidate profile — enter your credentials below</div>
-
-      <div class="field-grid">
-        <div class="field">
-          <label>Full Name <span class="req">*</span></label>
-          <input type="text" id="fullName" placeholder="Your full name" autocomplete="name">
-          <span class="error-msg" id="err-fullName">⚠ Name is required</span>
-        </div>
-        <div class="field">
-          <label>Roll Number <span class="req">*</span></label>
-          <input type="text" id="rollNo" placeholder="e.g. 23CSE001" autocomplete="off">
-          <span class="error-msg" id="err-rollNo">⚠ Roll number is required</span>
-        </div>
-        <div class="field">
-          <label>College Email <span class="req">*</span></label>
-          <input type="email" id="email" placeholder="you@college.edu" autocomplete="email">
-          <span class="error-msg" id="err-email">⚠ Valid email required</span>
-        </div>
-        <div class="field">
-          <label>Phone Number <span class="req">*</span></label>
-          <input type="tel" id="phone" placeholder="+91 XXXXX XXXXX" autocomplete="tel">
-          <span class="error-msg" id="err-phone">⚠ Phone number is required</span>
-        </div>
-      </div>
-
-      <div class="btn-row">
-        <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); letter-spacing: 1px;">STEP 1 / 4</span>
-        <button class="btn btn-primary" onclick="goNext(1)">
-          <span>Next</span>
-          <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Step 2: Academic -->
-    <div class="step" id="step2">
-      <div class="step-heading">Academic Profile</div>
-      <div class="step-sub">// Mapping institutional coordinates — year, section, specialization</div>
-
-      <div class="field-grid">
-        <div class="field">
-          <label>Year of Study <span class="req">*</span></label>
-          <select id="year">
-            <option value="">Select year</option>
-            <option value="1">1st Year</option>
-            <option value="2">2nd Year</option>
-            <option value="3">3rd Year</option>
-            <option value="4">4th Year</option>
-          </select>
-          <span class="error-msg" id="err-year">⚠ Select your year</span>
-        </div>
-        <div class="field">
-          <label>Section <span class="req">*</span></label>
-          <select id="section">
-            <option value="">Select section</option>
-            <option value="A">Section A</option>
-            <option value="B">Section B</option>
-            <option value="C">Section C</option>
-            <option value="D">Section D</option>
-          </select>
-          <span class="error-msg" id="err-section">⚠ Select your section</span>
-        </div>
-        <div class="field span2">
-          <label>Branch / Specialization <span class="req">*</span></label>
-          <select id="branch">
-            <option value="">Select branch</option>
-            <option value="cse-aiml">CSE (AI-ML)</option>
-            <option value="cse-ds">CSE (Data Science)</option>
-            <option value="cse-cyber">CSE (Cyber Security)</option>
-            <option value="cse-iot">CSE (IoT)</option>
-            <option value="cse-core">CSE (Core)</option>
-            <option value="other">Other</option>
-          </select>
-          <span class="error-msg" id="err-branch">⚠ Select your branch</span>
-        </div>
-      </div>
-
-      <div class="section-divider"><span>Optional Links</span></div>
-
-      <div class="field-grid">
-        <div class="field">
-          <label>GitHub Profile <span class="opt">[ optional ]</span></label>
-          <input type="url" id="github" placeholder="https://github.com/username">
-        </div>
-        <div class="field">
-          <label>LinkedIn Profile <span class="opt">[ optional ]</span></label>
-          <input type="url" id="linkedin" placeholder="https://linkedin.com/in/username">
-        </div>
-      </div>
-
-      <div class="btn-row">
-        <button class="btn btn-secondary" onclick="goBack(2)">
-          <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M13 5H1M5 9L1 5l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Back</span>
-        </button>
-        <button class="btn btn-primary" onclick="goNext(2)">
-          <span>Next</span>
-          <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Step 3: Skills -->
-    <div class="step" id="step3">
-      <div class="step-heading">Technical Skill Matrix</div>
-      <div class="step-sub">// Select all domains that apply to your current knowledge set</div>
-
-      <div class="field one">
-        <label>Areas of Interest in AI-ML <span class="req">*</span></label>
-        <div class="check-grid" id="interestGrid">
-          <div class="check-item" onclick="toggleCheck(this, 'Machine Learning')">
-            <div class="check-box">
-              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#050a0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <span class="check-label">Machine Learning</span>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this, 'Deep Learning')">
-            <div class="check-box">
-              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#050a0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <span class="check-label">Deep Learning</span>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this, 'Computer Vision')">
-            <div class="check-box">
-              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#050a0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <span class="check-label">Computer Vision</span>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this, 'NLP')">
-            <div class="check-box">
-              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#050a0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <span class="check-label">NLP / LLMs</span>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this, 'Data Science')">
-            <div class="check-box">
-              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#050a0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <span class="check-label">Data Science</span>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this, 'Reinforcement Learning')">
-            <div class="check-box">
-              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#050a0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <span class="check-label">Reinforcement Learning</span>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this, 'MLOps')">
-            <div class="check-box">
-              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#050a0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <span class="check-label">MLOps / Deployment</span>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this, 'Generative AI')">
-            <div class="check-box">
-              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#050a0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <span class="check-label">Generative AI</span>
-          </div>
-        </div>
-        <span class="error-msg" id="err-interests">⚠ Select at least one interest</span>
-      </div>
-
-      <div class="section-divider"><span>Experience Level</span></div>
-
-      <div class="field one">
-        <label>Your Current Proficiency <span class="req">*</span></label>
-        <div class="radio-group" id="proficiencyGroup">
-          <div class="radio-item" onclick="selectRadio(this, 'proficiencyGroup')">
-            <div class="radio-dot"></div>
-            <span class="radio-text">Beginner</span>
-          </div>
-          <div class="radio-item" onclick="selectRadio(this, 'proficiencyGroup')">
-            <div class="radio-dot"></div>
-            <span class="radio-text">Intermediate</span>
-          </div>
-          <div class="radio-item" onclick="selectRadio(this, 'proficiencyGroup')">
-            <div class="radio-dot"></div>
-            <span class="radio-text">Advanced</span>
-          </div>
-        </div>
-        <span class="error-msg" id="err-proficiency">⚠ Select your proficiency level</span>
-      </div>
-
-      <div class="btn-row">
-        <button class="btn btn-secondary" onclick="goBack(3)">
-          <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M13 5H1M5 9L1 5l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Back</span>
-        </button>
-        <button class="btn btn-primary" onclick="goNext(3)">
-          <span>Next</span>
-          <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Step 4: Intent -->
-    <div class="step" id="step4">
-      <div class="step-heading">Motivation & Intent</div>
-      <div class="step-sub">// Final module — explain your mission and what you bring to the division</div>
-
-      <div class="field-grid one" style="gap: 1.4rem;">
-        <div class="field">
-          <label>Why do you want to join SC CSE(AI-ML)? <span class="req">*</span></label>
-          <textarea id="whyJoin" placeholder="Tell us what drives your interest in this community and what you hope to gain or contribute..." maxlength="600" oninput="countChars(this, 'wjCount', 600)"></textarea>
-          <div class="char-count"><span id="wjCount">0</span> / 600</div>
-          <span class="error-msg" id="err-whyJoin">⚠ This field is required (min. 50 characters)</span>
-        </div>
-        <div class="field">
-          <label>Prior Project / Experience <span class="opt">[ optional ]</span></label>
-          <textarea id="experience" placeholder="Mention any relevant projects, courses, internships, or hackathons you've done in AI-ML..." maxlength="500" oninput="countChars(this, 'expCount', 500)"></textarea>
-          <div class="char-count"><span id="expCount">0</span> / 500</div>
-        </div>
-        <div class="field">
-          <label>How did you hear about us? <span class="req">*</span></label>
-          <select id="referral">
-            <option value="">Select source</option>
-            <option value="classmate">Classmate / Friend</option>
-            <option value="senior">Senior Student</option>
-            <option value="instagram">Instagram / Social Media</option>
-            <option value="notice">Notice Board / Announcement</option>
-            <option value="faculty">Faculty</option>
-            <option value="other">Other</option>
-          </select>
-          <span class="error-msg" id="err-referral">⚠ Please select an option</span>
-        </div>
-      </div>
-
-      <div class="btn-row">
-        <button class="btn btn-secondary" onclick="goBack(4)">
-          <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M13 5H1M5 9L1 5l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Back</span>
-        </button>
-        <button class="btn btn-primary" id="submitBtn" onclick="submitForm()">
-          <span id="submitText">Submit Application</span>
-          <div class="submit-loader" id="submitLoader">
-            <div class="loader-dot"></div>
-            <div class="loader-dot"></div>
-            <div class="loader-dot"></div>
-          </div>
-          <svg id="submitArrow" width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Success -->
+    <!-- Success Screen -->
     <div class="success-screen" id="successScreen">
       <div class="success-icon">
         <div class="success-ring"></div>
         <div class="success-ring"></div>
-        <div class="success-check">✓</div>
+        <div class="success-check">!</div>
       </div>
-      <div class="success-title">Application Received</div>
+      <h2 class="success-title">Upload Complete</h2>
       <div class="success-id" id="successId">REF: SC-AIML-0000</div>
-      <p class="success-msg">
-        Your interest has been logged. The SC CSE(AI-ML) team will review your profile and reach out to your registered email.
-        <br><br>
-        <span style="color: var(--cyan); font-family: var(--font-mono); font-size: 12px; letter-spacing: 1px;">// Welcome to the division.</span>
-      </p>
+      <p class="success-msg">Your data packet has been successfully transmitted to the AI-ML mainframe. Await further instructions.</p>
     </div>
 
-  </div>
+    <form id="recruitmentForm" novalidate>
+      
+      <!-- STEP 1: Personal Info -->
+      <div class="step active" id="step1">
+        <h2 class="step-heading">Subject Identification</h2>
+        <p class="step-sub">Enter primary biodata parameters.</p>
 
-  <!-- Footer -->
-  <div style="margin-top: 2rem; text-align: center;">
-    <p style="font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); letter-spacing: 2px;">SC CSE(AI-ML) · INTEREST PORTAL · 2025</p>
-  </div>
+        <div class="field-grid">
+          <div class="field">
+            <label for="fullName">Designation (Full Name) <span class="req">*</span></label>
+            <input type="text" id="fullName" name="fullName" placeholder="e.g. John Doe" required>
+            <div class="error-msg" id="err-fullName">ERR: Designation required</div>
+          </div>
+          
+          <div class="field">
+            <label for="rollNo">Serial No. (Roll No) <span class="req">*</span></label>
+            <input type="text" id="rollNo" name="rollNo" placeholder="e.g. 21CS8001" required>
+            <div class="error-msg" id="err-rollNo">ERR: Valid Serial No required</div>
+          </div>
+          
+          <div class="field">
+            <label for="email">Comms Link (Email) <span class="req">*</span></label>
+            <input type="email" id="email" name="email" placeholder="john@example.com" required>
+            <div class="error-msg" id="err-email">ERR: Invalid Comms protocol</div>
+          </div>
+          
+          <div class="field">
+            <label for="phone">Frequency (Phone Number) <span class="req">*</span></label>
+            <input type="tel" id="phone" name="phone" placeholder="10-digit number" required>
+            <div class="error-msg" id="err-phone">ERR: Invalid Frequency (10 digits)</div>
+          </div>
+        </div>
 
+        <div class="btn-row">
+          <div></div>
+          <button type="button" class="btn btn-primary" onclick="nextStep(1)">Engage Forward <span class="terminal-cursor"></span></button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Academic Info -->
+      <div class="step" id="step2">
+        <h2 class="step-heading">Academic Specs</h2>
+        <p class="step-sub">Provide current operational status.</p>
+
+        <div class="field-grid">
+          <div class="field">
+            <label>Current Cycle (Year) <span class="req">*</span></label>
+            <div class="radio-group" id="yearGroup">
+              <label class="radio-item"><div class="radio-dot"></div><span class="radio-text">1st Year</span><input type="radio" name="year" value="1st" style="display:none"></label>
+              <label class="radio-item"><div class="radio-dot"></div><span class="radio-text">2nd Year</span><input type="radio" name="year" value="2nd" style="display:none"></label>
+              <label class="radio-item"><div class="radio-dot"></div><span class="radio-text">3rd Year</span><input type="radio" name="year" value="3rd" style="display:none"></label>
+              <label class="radio-item"><div class="radio-dot"></div><span class="radio-text">4th Year</span><input type="radio" name="year" value="4th" style="display:none"></label>
+            </div>
+            <div class="error-msg" id="err-year">ERR: Cycle selection required</div>
+          </div>
+          
+          <div class="field">
+            <label for="section">Sector (Section) <span class="req">*</span></label>
+            <input type="text" id="section" name="section" placeholder="e.g. A, B, C" required>
+            <div class="error-msg" id="err-section">ERR: Sector required</div>
+          </div>
+          
+          <div class="field span2">
+            <label for="branch">Division (Branch) <span class="req">*</span></label>
+            <select id="branch" name="branch" required>
+              <option value="" disabled selected>-- Select Division --</option>
+              <option value="CSE">CSE (Core)</option>
+              <option value="CSE-AIML">CSE (AI-ML)</option>
+              <option value="CSE-DS">CSE (Data Science)</option>
+              <option value="IT">Information Technology</option>
+              <option value="ECE">Electronics & Communication</option>
+              <option value="OTHER">Other Module</option>
+            </select>
+            <div class="error-msg" id="err-branch">ERR: Division required</div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" class="btn btn-secondary" onclick="prevStep(2)">Reverse</button>
+          <button type="button" class="btn btn-primary" onclick="nextStep(2)">Engage Forward <span class="terminal-cursor"></span></button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Skills -->
+      <div class="step" id="step3">
+        <h2 class="step-heading">Network & Skills</h2>
+        <p class="step-sub">Select operational proficiencies.</p>
+
+        <div class="field-grid one">
+          <div class="field">
+            <label>Sub-routines (Interest Areas) <span class="req">*</span></label>
+            <div class="check-grid">
+              <label class="check-item"><div class="check-box"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="#000"/></svg></div><span class="check-label">Machine Learning</span><input type="checkbox" name="interests" value="ML" style="display:none"></label>
+              <label class="check-item"><div class="check-box"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="#000"/></svg></div><span class="check-label">Data Science</span><input type="checkbox" name="interests" value="Data Science" style="display:none"></label>
+              <label class="check-item"><div class="check-box"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="#000"/></svg></div><span class="check-label">Web Development</span><input type="checkbox" name="interests" value="Web Dev" style="display:none"></label>
+              <label class="check-item"><div class="check-box"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="#000"/></svg></div><span class="check-label">App Development</span><input type="checkbox" name="interests" value="App Dev" style="display:none"></label>
+              <label class="check-item"><div class="check-box"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="#000"/></svg></div><span class="check-label">Cloud Computing</span><input type="checkbox" name="interests" value="Cloud" style="display:none"></label>
+              <label class="check-item"><div class="check-box"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="#000"/></svg></div><span class="check-label">Cybersecurity</span><input type="checkbox" name="interests" value="Cybersecurity" style="display:none"></label>
+            </div>
+            <div class="error-msg" id="err-interests">ERR: Minimum 1 sub-routine required</div>
+          </div>
+        </div>
+
+        <div class="section-divider"><span>EXTERNAL LINKS</span></div>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="github">GitHub Node</label>
+            <input type="url" id="github" name="github" placeholder="github.com/username">
+          </div>
+          <div class="field">
+            <label for="linkedin">LinkedIn Node</label>
+            <input type="url" id="linkedin" name="linkedin" placeholder="linkedin.com/in/username">
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" class="btn btn-secondary" onclick="prevStep(3)">Reverse</button>
+          <button type="button" class="btn btn-primary" onclick="nextStep(3)">Engage Forward <span class="terminal-cursor"></span></button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Experience -->
+      <div class="step" id="step4">
+        <h2 class="step-heading">Final Deployment</h2>
+        <p class="step-sub">Finalize operational intent.</p>
+
+        <div class="field-grid one">
+          <div class="field">
+            <label>Programming Proficiency <span class="req">*</span></label>
+            <div class="radio-group" id="profGroup">
+              <label class="radio-item"><div class="radio-dot"></div><span class="radio-text">Noob (Beginner)</span><input type="radio" name="proficiency" value="Beginner" style="display:none"></label>
+              <label class="radio-item"><div class="radio-dot"></div><span class="radio-text">Hacker (Intermediate)</span><input type="radio" name="proficiency" value="Intermediate" style="display:none"></label>
+              <label class="radio-item"><div class="radio-dot"></div><span class="radio-text">Wizard (Advanced)</span><input type="radio" name="proficiency" value="Advanced" style="display:none"></label>
+            </div>
+            <div class="error-msg" id="err-proficiency">ERR: Proficiency level required</div>
+          </div>
+          
+          <div class="field">
+            <label for="whyJoin">Why initialize sequence with SC CSE(AI-ML)? <span class="req">*</span></label>
+            <textarea id="whyJoin" name="whyJoin" placeholder="Input rationale here... (Max 300 bytes)" maxlength="300" required oninput="updateCount('whyJoin', 'whyCount')"></textarea>
+            <div class="char-count"><span id="whyCount">0</span>/300</div>
+            <div class="error-msg" id="err-whyJoin">ERR: Rationale required</div>
+          </div>
+          
+          <div class="field">
+            <label for="experience">Past Operations (Projects/Experience)</label>
+            <textarea id="experience" name="experience" placeholder="Detail past operations..." maxlength="500" oninput="updateCount('experience', 'expCount')"></textarea>
+            <div class="char-count"><span id="expCount">0</span>/500</div>
+          </div>
+          
+          <div class="field">
+            <label for="referral">Signal Origin (How did you find us?)</label>
+            <select id="referral" name="referral">
+              <option value="" disabled selected>-- Select Source --</option>
+              <option value="Social Media">Social Network</option>
+              <option value="Seniors/Friends">Peer-to-Peer</option>
+              <option value="College Notice">Mainframe Notice</option>
+              <option value="Event/Workshop">Live Operation</option>
+              <option value="Other">Unknown Origin</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" class="btn btn-secondary" onclick="prevStep(4)">Reverse</button>
+          <button type="button" class="btn btn-primary" id="submitBtn" onclick="submitForm()">
+            <span id="btnText">EXECUTE UPLOAD</span>
+            <div class="submit-loader" id="submitLoader">
+              <div class="loader-bar"></div>
+              <div class="loader-bar"></div>
+              <div class="loader-bar"></div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
 </div>
 
 <script>
-  let currentStep = 1;
-  const selectedInterests = new Set();
-  let proficiencySelected = '';
+  // Dynamic Target Lock Cursor
+  document.addEventListener('mousemove', (e) => {
+    let cursor = document.getElementById('target-lock');
+    if (!cursor && window.innerWidth > 600) {
+      cursor = document.createElement('div');
+      cursor.id = 'target-lock';
+      document.body.appendChild(cursor);
+    }
+    if (cursor) {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    }
+  });
 
-  const stepTitles = [
-    '', // 0 unused
-    '// 01 · Identity Verification',
-    '// 02 · Academic Profile',
-    '// 03 · Skill Matrix',
-    '// 04 · Mission Statement'
-  ];
+  document.addEventListener('mousedown', () => {
+    const cursor = document.getElementById('target-lock');
+    if (cursor) {
+      cursor.style.transform = 'translate(-50%, -50%) scale(0.8) rotate(45deg)';
+      cursor.style.borderColor = 'var(--pink)';
+    }
+  });
 
-  const progressMap = {1: 12.5, 2: 37.5, 3: 62.5, 4: 87.5};
+  document.addEventListener('mouseup', () => {
+    const cursor = document.getElementById('target-lock');
+    if (cursor) {
+      cursor.style.transform = 'translate(-50%, -50%) scale(1) rotate(0deg)';
+      cursor.style.borderColor = 'var(--cyan)';
+    }
+  });
 
-  function setProgress(step) {
-    document.getElementById('progressFill').style.width = progressMap[step] + '%';
-    document.getElementById('panelTitle').textContent = stepTitles[step];
-
-    for (let i = 1; i <= 4; i++) {
-      const node = document.getElementById('sn' + i);
-      const dot = node.querySelector('.step-dot');
-      node.classList.remove('active', 'done');
-      dot.classList.remove('active', 'done');
-      if (i < step) {
-        node.classList.add('done');
-        dot.classList.add('done');
-        dot.innerHTML = '✓';
-      } else if (i === step) {
-        node.classList.add('active');
-        dot.classList.add('active');
-        dot.textContent = '0' + i;
+  // UI Interaction Logic
+  document.querySelectorAll('.check-item').forEach(item => {
+    item.addEventListener('click', function() {
+      const checkbox = this.querySelector('input[type="checkbox"]');
+      checkbox.checked = !checkbox.checked;
+      if (checkbox.checked) {
+        this.classList.add('checked');
       } else {
-        dot.textContent = '0' + i;
+        this.classList.remove('checked');
       }
-    }
+      document.getElementById('err-interests').classList.remove('show');
+    });
+  });
 
-    for (let i = 1; i <= 3; i++) {
-      const conn = document.getElementById('sc' + i);
-      if (conn) {
-        if (i < step) conn.classList.add('done');
-        else conn.classList.remove('done');
-      }
-    }
-  }
+  document.querySelectorAll('.radio-group').forEach(group => {
+    const items = group.querySelectorAll('.radio-item');
+    items.forEach(item => {
+      item.addEventListener('click', function() {
+        items.forEach(i => i.classList.remove('selected'));
+        this.classList.add('selected');
+        this.querySelector('input[type="radio"]').checked = true;
+        
+        const errId = group.id === 'yearGroup' ? 'err-year' : 'err-proficiency';
+        document.getElementById(errId).classList.remove('show');
+      });
+    });
+  });
 
-  function showStep(n) {
-    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-    const el = document.getElementById('step' + n);
-    if (el) el.classList.add('active');
-    setProgress(n);
-    currentStep = n;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.addEventListener('input', function() {
+      this.classList.remove('error');
+      const errEl = document.getElementById('err-' + this.id);
+      if (errEl) errEl.classList.remove('show');
+    });
+  });
 
-  function toggleCheck(el, val) {
-    el.classList.toggle('checked');
-    if (el.classList.contains('checked')) selectedInterests.add(val);
-    else selectedInterests.delete(val);
-  }
-
-  function selectRadio(el, groupId) {
-    document.querySelectorAll('#' + groupId + ' .radio-item').forEach(r => r.classList.remove('selected'));
-    el.classList.add('selected');
-    proficiencySelected = el.querySelector('.radio-text').textContent;
-  }
-
-  function countChars(el, countId, max) {
+  function updateCount(inputId, countId) {
+    const el = document.getElementById(inputId);
     document.getElementById(countId).textContent = el.value.length;
   }
 
-  function setError(id, show) {
-    const el = document.getElementById('err-' + id);
-    const input = document.getElementById(id);
-    if (el) { el.classList.toggle('show', show); }
-    if (input) { input.classList.toggle('error', show); }
-  }
-
-  function validateStep(step) {
-    let valid = true;
-    if (step === 1) {
-      const name = document.getElementById('fullName').value.trim();
-      const roll = document.getElementById('rollNo').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      if (!name) { setError('fullName', true); valid = false; } else setError('fullName', false);
-      if (!roll) { setError('rollNo', true); valid = false; } else setError('rollNo', false);
-      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError('email', true); valid = false; } else setError('email', false);
-      if (!phone) { setError('phone', true); valid = false; } else setError('phone', false);
+  function validateStep(stepNum) {
+    let isValid = true;
+    
+    if (stepNum === 1) {
+      const name = document.getElementById('fullName');
+      const roll = document.getElementById('rollNo');
+      const email = document.getElementById('email');
+      const phone = document.getElementById('phone');
+      
+      if (!name.value.trim()) { showError(name, 'err-fullName'); isValid = false; }
+      if (!roll.value.trim()) { showError(roll, 'err-rollNo'); isValid = false; }
+      
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email.value.trim())) { showError(email, 'err-email'); isValid = false; }
+      
+      const phoneRegex = /^[0-9]{10}$/;
+      if (!phoneRegex.test(phone.value.replace(/\D/g, ''))) { showError(phone, 'err-phone'); isValid = false; }
     }
-    if (step === 2) {
-      const year = document.getElementById('year').value;
-      const section = document.getElementById('section').value;
-      const branch = document.getElementById('branch').value;
-      if (!year) { setError('year', true); valid = false; } else setError('year', false);
-      if (!section) { setError('section', true); valid = false; } else setError('section', false);
-      if (!branch) { setError('branch', true); valid = false; } else setError('branch', false);
+    else if (stepNum === 2) {
+      const yearSelected = document.querySelector('input[name="year"]:checked');
+      const section = document.getElementById('section');
+      const branch = document.getElementById('branch');
+      
+      if (!yearSelected) { 
+        document.getElementById('err-year').classList.add('show'); 
+        isValid = false; 
+      }
+      if (!section.value.trim()) { showError(section, 'err-section'); isValid = false; }
+      if (!branch.value) { showError(branch, 'err-branch'); isValid = false; }
     }
-    if (step === 3) {
-      if (selectedInterests.size === 0) {
+    else if (stepNum === 3) {
+      const interests = document.querySelectorAll('input[name="interests"]:checked');
+      if (interests.length === 0) {
         document.getElementById('err-interests').classList.add('show');
-        valid = false;
-      } else {
-        document.getElementById('err-interests').classList.remove('show');
-      }
-      if (!proficiencySelected) {
-        document.getElementById('err-proficiency').classList.add('show');
-        valid = false;
-      } else {
-        document.getElementById('err-proficiency').classList.remove('show');
+        isValid = false;
       }
     }
-    if (step === 4) {
-      const why = document.getElementById('whyJoin').value.trim();
-      const ref = document.getElementById('referral').value;
-      if (!why || why.length < 50) { setError('whyJoin', true); valid = false; } else setError('whyJoin', false);
-      if (!ref) { setError('referral', true); valid = false; } else setError('referral', false);
-    }
-    return valid;
+    
+    return isValid;
   }
 
-  function goNext(from) {
-    if (validateStep(from)) {
-      showStep(from + 1);
-    }
+  function showError(inputEl, errId) {
+    inputEl.classList.add('error');
+    document.getElementById(errId).classList.add('show');
   }
 
-  function goBack(from) {
-    showStep(from - 1);
+  function nextStep(currentStep) {
+    if (!validateStep(currentStep)) return;
+    
+    document.getElementById('step' + currentStep).classList.remove('active');
+    document.getElementById('step' + (currentStep + 1)).classList.add('active');
+    
+    const currNode = document.getElementById('sn' + currentStep);
+    const currDot = currNode.querySelector('.step-dot');
+    currNode.classList.remove('active');
+    currNode.classList.add('done');
+    currDot.classList.remove('active');
+    currDot.classList.add('done');
+    currDot.innerHTML = '✓';
+    
+    const nextNode = document.getElementById('sn' + (currentStep + 1));
+    nextNode.classList.add('active');
+    nextNode.querySelector('.step-dot').classList.add('active');
+    
+    document.getElementById('sc' + currentStep).classList.add('done');
+    
+    const progress = (currentStep / 3) * 100;
+    document.getElementById('progressFill').style.width = progress + '%';
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function prevStep(currentStep) {
+    document.getElementById('step' + currentStep).classList.remove('active');
+    document.getElementById('step' + (currentStep - 1)).classList.add('active');
+    
+    const currNode = document.getElementById('sn' + currentStep);
+    currNode.classList.remove('active');
+    currNode.querySelector('.step-dot').classList.remove('active');
+    
+    const prevNode = document.getElementById('sn' + (currentStep - 1));
+    prevNode.classList.remove('done');
+    prevNode.classList.add('active');
+    const prevDot = prevNode.querySelector('.step-dot');
+    prevDot.classList.remove('done');
+    prevDot.classList.add('active');
+    prevDot.innerHTML = '0' + (currentStep - 1);
+    
+    document.getElementById('sc' + (currentStep - 1)).classList.remove('done');
+    
+    const progress = ((currentStep - 2) / 3) * 100;
+    document.getElementById('progressFill').style.width = progress + '%';
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   async function submitForm() {
-    if (!validateStep(4)) return;
-    const btn = document.getElementById('submitBtn');
-    const txt = document.getElementById('submitText');
-    const loader = document.getElementById('submitLoader');
-    const arrow = document.getElementById('submitArrow');
-    txt.textContent = 'Processing';
-    loader.classList.add('show');
-    arrow.style.display = 'none';
-    btn.disabled = true;
+    let isValid = true;
+    const profSelected = document.querySelector('input[name="proficiency"]:checked');
+    const whyJoin = document.getElementById('whyJoin');
+    
+    if (!profSelected) { 
+      document.getElementById('err-proficiency').classList.add('show'); 
+      isValid = false; 
+    }
+    if (!whyJoin.value.trim()) { showError(whyJoin, 'err-whyJoin'); isValid = false; }
+    
+    if (!isValid) return;
 
-    const data = {
-      fullName: document.getElementById('fullName').value.trim(),
-      rollNo: document.getElementById('rollNo').value.trim(),
-      email: document.getElementById('email').value.trim(),
-      phone: document.getElementById('phone').value.trim(),
-      year: document.getElementById('year').value,
-      section: document.getElementById('section').value,
-      branch: document.getElementById('branch').value,
-      github: document.getElementById('github').value.trim(),
-      linkedin: document.getElementById('linkedin').value.trim(),
-      interests: Array.from(selectedInterests),
-      proficiency: proficiencySelected,
-      whyJoin: document.getElementById('whyJoin').value.trim(),
-      experience: document.getElementById('experience').value.trim(),
-      referral: document.getElementById('referral').value
-    };
+    const btn = document.getElementById('submitBtn');
+    const txt = document.getElementById('btnText');
+    const loader = document.getElementById('submitLoader');
+    
+    btn.disabled = true;
+    txt.textContent = 'TRANSMITTING...';
+    loader.classList.add('show');
+
+    const formData = new FormData(document.getElementById('recruitmentForm'));
+    const data = Object.fromEntries(formData.entries());
+    data.interests = formData.getAll('interests');
 
     try {
       const response = await fetch('/api/submit', {
@@ -1357,13 +1242,10 @@
       });
       
       const result = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(result.error || 'Server error');
-      }
+      if (!response.ok) throw new Error(result.error || 'Server error');
 
       document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-      document.getElementById('panelTitle').textContent = '// Application Submitted';
+      document.getElementById('panelTitle').textContent = '// DATA UPLOADED';
       document.getElementById('progressFill').style.width = '100%';
 
       for (let i = 1; i <= 4; i++) {
@@ -1386,62 +1268,12 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
       
     } catch (err) {
-      alert("Submission failed: " + err.message + "\\nMake sure the backend server is running.");
-      txt.textContent = 'Submit Application';
+      alert("Transmission failed: " + err.message + "\nCheck backend connection.");
+      txt.textContent = 'EXECUTE UPLOAD';
       loader.classList.remove('show');
-      arrow.style.display = 'block';
       btn.disabled = false;
     }
   }
-</script>
-
-<script>
-  // Dynamic Touch Sensation (Mouse Tracker Glow)
-  document.addEventListener('mousemove', (e) => {
-    // We add a subtle glowing aura that follows the cursor
-    const x = e.clientX;
-    const y = e.clientY;
-    
-    // Check if the glow element exists, if not create it
-    let glow = document.getElementById('touch-glow');
-    if (!glow) {
-      glow = document.createElement('div');
-      glow.id = 'touch-glow';
-      glow.style.position = 'fixed';
-      glow.style.width = '300px';
-      glow.style.height = '300px';
-      glow.style.borderRadius = '50%';
-      glow.style.background = 'radial-gradient(circle, rgba(0,245,212,0.15) 0%, transparent 60%)';
-      glow.style.pointerEvents = 'none';
-      glow.style.zIndex = '9999';
-      glow.style.transform = 'translate(-50%, -50%)';
-      glow.style.transition = 'width 0.2s, height 0.2s';
-      document.body.appendChild(glow);
-    }
-    
-    // Make the glow follow the cursor
-    glow.style.left = x + 'px';
-    glow.style.top = y + 'px';
-  });
-
-  // Expand the glow slightly when clicking
-  document.addEventListener('mousedown', () => {
-    const glow = document.getElementById('touch-glow');
-    if (glow) {
-      glow.style.width = '400px';
-      glow.style.height = '400px';
-      glow.style.background = 'radial-gradient(circle, rgba(157, 78, 221, 0.25) 0%, transparent 60%)';
-    }
-  });
-
-  document.addEventListener('mouseup', () => {
-    const glow = document.getElementById('touch-glow');
-    if (glow) {
-      glow.style.width = '300px';
-      glow.style.height = '300px';
-      glow.style.background = 'radial-gradient(circle, rgba(0,245,212,0.15) 0%, transparent 60%)';
-    }
-  });
 </script>
 
 </body>
